@@ -12,4 +12,5 @@
     <string name="priority_medium">Priority Medium</string>
     <string name="priority_low">Priority Low</string>
     <string name="delete_all">Delete All</string>
+    <string name="add_todo">Add Todo</string>
 </resources>
