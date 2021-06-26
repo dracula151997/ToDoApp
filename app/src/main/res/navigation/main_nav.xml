@@ -7,17 +7,21 @@
 
     <fragment
         android:id="@+id/toDoListFragment"
-        android:name="com.semicolon.todoapp.ui.ToDoListFragment"
+        android:name="com.semicolon.todoapp.ui.fragments.ToDoListFragment"
         android:label="fragment_to_do_list"
-        tools:layout="@layout/fragment_to_do_list" />
+        tools:layout="@layout/fragment_to_do_list">
+        <action
+            android:id="@+id/action_toDoListFragment_to_addTodoFragment"
+            app:destination="@id/addTodoFragment" />
+    </fragment>
     <fragment
         android:id="@+id/addTodoFragment"
-        android:name="com.semicolon.todoapp.ui.AddTodoFragment"
+        android:name="com.semicolon.todoapp.ui.fragments.AddTodoFragment"
         android:label="fragment_add_todo"
         tools:layout="@layout/fragment_add_todo" />
     <fragment
         android:id="@+id/updateTodoFragment"
-        android:name="com.semicolon.todoapp.ui.UpdateTodoFragment"
+        android:name="com.semicolon.todoapp.ui.fragments.UpdateTodoFragment"
         android:label="fragment_update_todo"
         tools:layout="@layout/fragment_update_todo" />
 </navigation>

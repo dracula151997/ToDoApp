@@ -12,10 +12,17 @@ import androidx.fragment.app.Fragment
 /**
  *Created by Hassan Mohammed on 6/25/21
  */
-abstract class BaseFragment<VB : ViewDataBinding>(@LayoutRes private val layoutRes: Int) :
+abstract class BaseFragment<VB : ViewDataBinding>(@LayoutRes val layoutRes: Int) :
     Fragment() {
     private var _binding: VB? = null
     protected val binding get() = _binding!!
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(setOptionMenu())
+    }
+
+    abstract fun setOptionMenu(): Boolean
 
     override fun onCreateView(
         inflater: LayoutInflater,
