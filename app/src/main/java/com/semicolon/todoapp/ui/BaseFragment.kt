@@ -17,6 +17,7 @@ abstract class BaseFragment<VB : ViewDataBinding>(@LayoutRes val layoutRes: Int)
     private var _binding: VB? = null
     protected val binding get() = _binding!!
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(setOptionMenu())
