@@ -18,4 +18,8 @@ class MainRepository @Inject constructor(
     suspend fun insertTodo(todoEntity: TodoEntity){
         todoDao.insertTodo(todoEntity)
     }
+
+    suspend fun updateTodo(todoEntity: TodoEntity){
+        todoDao.updateTodo(todoEntity)
+    }
 }

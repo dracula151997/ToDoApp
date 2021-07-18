@@ -5,6 +5,17 @@
 
     <data>
 
+        <import type="com.semicolon.todoapp.data.TodoEntity" />
+
+        <import type="java.util.List" />
+
+        <variable
+            name="todo"
+            type="TodoEntity" />
+
+        <variable
+            name="priorityList"
+            type="List&lt;String>" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -28,7 +39,8 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/title"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:text="@{todo.title}" />
 
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -67,9 +79,11 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/descriptionEditText"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="100dp"
                 android:gravity="top|start"
-                android:inputType="textMultiLine" />
+                android:inputType="textMultiLine"
+                android:maxLines="100"
+                android:text="@{todo.description}" />
 
 
         </com.google.android.material.textfield.TextInputLayout>

@@ -33,7 +33,8 @@
         <argument
             android:name="todo"
             app:argType="com.semicolon.todoapp.data.TodoEntity"
-            app:nullable="true" />
+            app:nullable="true"
+            android:defaultValue="@null" />
     </fragment>
     <fragment
         android:id="@+id/updateTodoFragment"

@@ -35,14 +35,12 @@ class AddTodoFragment : BaseFragment<FragmentAddTodoBinding>(R.layout.fragment_a
         (binding.priorityTextField.editText as? AutoCompleteTextView)?.setAdapter(adapter)
 
         args.todo?.let { todo ->
+            binding.todo = todo
             binding.prioritySpinner.setText(
                 binding.prioritySpinner.adapter.getItem(
-                    parsePriorityToPosition(todo.priority)
-                ) as String,
-                false
+                    convertPriorityToPosition(todo.priority)
+                ) as String, false
             )
-            binding.descriptionEditText.setText(todo.description)
-            binding.title.setText(todo.title)
             update = true
 
         }
@@ -50,7 +48,8 @@ class AddTodoFragment : BaseFragment<FragmentAddTodoBinding>(R.layout.fragment_a
 
     }
 
-    private fun parsePriorityToPosition(priority: Priority): Int {
+
+    private fun convertPriorityToPosition(priority: Priority): Int {
         return when (priority) {
             Priority.LOW -> 0
             Priority.MEDIUM -> 1
@@ -67,7 +66,6 @@ class AddTodoFragment : BaseFragment<FragmentAddTodoBinding>(R.layout.fragment_a
     }
 
     private fun changePriorityTextColor(spinnerTextView: TextView, position: Int) {
-        println("Spinner Text View -> $spinnerTextView")
         when (position) {
             0 -> spinnerTextView.setTextColor(Color.RED)
             1 -> spinnerTextView.setTextColor(Color.YELLOW)
@@ -88,12 +86,29 @@ class AddTodoFragment : BaseFragment<FragmentAddTodoBinding>(R.layout.fragment_a
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.menu_todo_add) {
-            insertNewTodoDB()
+            if (!update)
+                insertTodo()
+            else
+                updateTodo()
         }
         return super.onOptionsItemSelected(item)
     }
 
-    private fun insertNewTodoDB() {
+    private fun updateTodo() {
+        args.todo?.let { todo ->
+            todo.title = binding.title.text.toString()
+            todo.description = binding.descriptionEditText.text.toString()
+            todo.priority = Priority.parse(priority)
+            viewModel.updateTodo(todo)
+            Toast.makeText(requireContext(), "Todo updated successfully!", Toast.LENGTH_SHORT)
+                .show()
+            findNavController().popBackStack()
+
+
+        }
+    }
+
+    private fun insertTodo() {
         val title = binding.title.text.toString()
         val description = binding.descriptionEditText.text.toString()
         val validation = validateTodoData(title, description)
