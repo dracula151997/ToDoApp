@@ -2,7 +2,6 @@ package com.semicolon.todoapp.ui.fragments
 
 import android.view.Menu
 import android.view.MenuInflater
-import android.view.MenuItem
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -20,11 +19,6 @@ class ToDoListFragment : BaseFragment<FragmentToDoListBinding>(R.layout.fragment
     private val adapter by lazy { TodoAdapter() }
     override fun onViewCreated() {
         binding.todoAdapter = adapter
-        lifecycleScope.launchWhenCreated {
-            viewModel.readTodos.collect { todos ->
-                adapter.setTodos(todos)
-            }
-        }
     }
 
     override fun setListenersForViews() {
@@ -32,6 +26,11 @@ class ToDoListFragment : BaseFragment<FragmentToDoListBinding>(R.layout.fragment
     }
 
     override fun subscribeLiveDataObservers() {
+        lifecycleScope.launchWhenCreated {
+            viewModel.readTodos.collect { todos ->
+                adapter.setTodos(todos)
+            }
+        }
     }
 
     override fun setOptionMenu(): Boolean = true
@@ -39,10 +38,6 @@ class ToDoListFragment : BaseFragment<FragmentToDoListBinding>(R.layout.fragment
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.menu_todo_list, menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return super.onOptionsItemSelected(item)
     }
 
 

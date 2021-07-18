@@ -2,14 +2,17 @@ package com.semicolon.todoapp.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.semicolon.todoapp.data.TodoEntity
 import com.semicolon.todoapp.databinding.ListItemTodoBinding
+import com.semicolon.todoapp.ui.fragments.ToDoListFragmentDirections
 
 /**
  *Created by Hassan Mohammed on 7/18/21
  */
-class TodoAdapter : RecyclerView.Adapter<TodoAdapter.TodoViewHolder>() {
+class TodoAdapter :
+    RecyclerView.Adapter<TodoAdapter.TodoViewHolder>() {
     private var todos: List<TodoEntity> = emptyList()
     fun setTodos(todos: List<TodoEntity>) {
         this.todos = todos
@@ -29,6 +32,11 @@ class TodoAdapter : RecyclerView.Adapter<TodoAdapter.TodoViewHolder>() {
         fun bind(item: TodoEntity) {
             binding.todo = item
             binding.executePendingBindings()
+            itemView.setOnClickListener {
+                val action =
+                    ToDoListFragmentDirections.actionToDoListFragmentToUpdateTodoFragment(item)
+                it.findNavController().navigate(action)
+            }
         }
     }
 
