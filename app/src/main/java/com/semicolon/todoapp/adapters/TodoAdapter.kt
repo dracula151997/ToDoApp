@@ -40,6 +40,8 @@ class TodoAdapter :
         }
     }
 
+    fun getTodo(position: Int) = todos[position]
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodoViewHolder =
         TodoViewHolder.getViewHolder(parent)
 

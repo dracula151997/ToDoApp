@@ -3,14 +3,18 @@ package com.semicolon.todoapp.ui.fragments
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.semicolon.todoapp.R
 import com.semicolon.todoapp.adapters.TodoAdapter
 import com.semicolon.todoapp.databinding.FragmentToDoListBinding
 import com.semicolon.todoapp.repo.MainViewModel
 import com.semicolon.todoapp.ui.BaseFragment
+import com.semicolon.todoapp.utils.SwipeToDelete
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 
@@ -20,6 +24,7 @@ class ToDoListFragment : BaseFragment<FragmentToDoListBinding>(R.layout.fragment
     private val adapter by lazy { TodoAdapter() }
     override fun onViewCreated() {
         binding.todoAdapter = adapter
+        registerSwipeToDelete()
     }
 
     override fun setListenersForViews() {
@@ -51,6 +56,24 @@ class ToDoListFragment : BaseFragment<FragmentToDoListBinding>(R.layout.fragment
 
     private fun deleteAllTodos() {
         viewModel.deleteAllTodos()
+    }
+
+    private fun registerSwipeToDelete() {
+        val swipeToDeleteListener = object : SwipeToDelete() {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val todo = adapter.getTodo(viewHolder.adapterPosition)
+                viewModel.deleteTodo(todo)
+                Toast.makeText(
+                    requireContext(),
+                    "Successfully removed: '${todo.title}'",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+
+        }
+
+        val itemTouchHelper = ItemTouchHelper(swipeToDeleteListener)
+        itemTouchHelper.attachToRecyclerView(binding.todosRecycler)
     }
 
 

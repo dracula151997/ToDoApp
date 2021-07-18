@@ -20,6 +20,7 @@
         tools:context=".ui.ToDoListFragment">
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/todos_recycler"
             setTodoAdapter="@{todoAdapter}"
             viewGone="@{emptyTodo}"
             android:layout_width="0dp"
