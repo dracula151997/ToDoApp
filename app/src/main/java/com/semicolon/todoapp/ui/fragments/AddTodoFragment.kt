@@ -35,8 +35,8 @@ class AddTodoFragment : BaseFragment<FragmentAddTodoBinding>(R.layout.fragment_a
 
     override fun setListenersForViews() {
         binding.prioritySpinner.setOnItemClickListener { parent, _, position, _ ->
-            priority = parent?.selectedItem.toString()
-            val spinnerTextView = parent?.getChildAt(0) as TextView
+            priority = parent?.getItemAtPosition(position) as String
+            val spinnerTextView = parent.getChildAt(0) as TextView
             changePriorityTextColor(spinnerTextView, position)
         }
     }
