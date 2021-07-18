@@ -10,6 +10,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.semicolon.todoapp.R
 import com.semicolon.todoapp.data.Priority
 import com.semicolon.todoapp.data.TodoEntity
@@ -22,6 +23,8 @@ import dagger.hilt.android.AndroidEntryPoint
 class AddTodoFragment : BaseFragment<FragmentAddTodoBinding>(R.layout.fragment_add_todo) {
     private val viewModel by viewModels<MainViewModel>()
     private var priority: String = ""
+    private val args by navArgs<AddTodoFragmentArgs>()
+    private var update: Boolean = false
     override fun onViewCreated() {
         val priorityItems = listOf("Low", "Medium", "High")
         val adapter = ArrayAdapter(
@@ -31,6 +34,28 @@ class AddTodoFragment : BaseFragment<FragmentAddTodoBinding>(R.layout.fragment_a
         )
         (binding.priorityTextField.editText as? AutoCompleteTextView)?.setAdapter(adapter)
 
+        args.todo?.let { todo ->
+            binding.prioritySpinner.setText(
+                binding.prioritySpinner.adapter.getItem(
+                    parsePriorityToPosition(todo.priority)
+                ) as String,
+                false
+            )
+            binding.descriptionEditText.setText(todo.description)
+            binding.title.setText(todo.title)
+            update = true
+
+        }
+
+
+    }
+
+    private fun parsePriorityToPosition(priority: Priority): Int {
+        return when (priority) {
+            Priority.LOW -> 0
+            Priority.MEDIUM -> 1
+            Priority.HIGH -> 2
+        }
     }
 
     override fun setListenersForViews() {

@@ -34,7 +34,7 @@ class TodoAdapter :
             binding.executePendingBindings()
             itemView.setOnClickListener {
                 val action =
-                    ToDoListFragmentDirections.actionToDoListFragmentToUpdateTodoFragment(item)
+                    ToDoListFragmentDirections.actionToDoListFragmentToAddTodoFragment(item)
                 it.findNavController().navigate(action)
             }
         }
