@@ -17,7 +17,7 @@ class MainViewModel @Inject constructor(
     private val repository: MainRepository,
     application: Application
 ) : AndroidViewModel(application) {
-    val readTodos = repository.getTodos
+    val readTodos = repository.getTodos 
 
     fun insertTodo(todoEntity: TodoEntity) = viewModelScope.launch(Dispatchers.IO) {
         repository.insertTodo(todoEntity)

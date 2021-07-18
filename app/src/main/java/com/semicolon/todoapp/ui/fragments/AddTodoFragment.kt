@@ -4,8 +4,10 @@ import android.graphics.Color
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import android.view.View
-import android.widget.*
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
+import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.semicolon.todoapp.R
@@ -32,26 +34,15 @@ class AddTodoFragment : BaseFragment<FragmentAddTodoBinding>(R.layout.fragment_a
     }
 
     override fun setListenersForViews() {
-        binding.prioritySpinner.onItemSelectedListener =
-            object : AdapterView.OnItemSelectedListener {
-                override fun onItemSelected(
-                    parent: AdapterView<*>?,
-                    view: View?,
-                    position: Int,
-                    id: Long
-                ) {
-                    priority = parent?.selectedItem.toString()
-                    val spinnerTextView = parent?.getChildAt(0) as TextView
-                    changePriorityTextColor(spinnerTextView, position)
-                }
-
-                override fun onNothingSelected(parent: AdapterView<*>?) {
-                }
-
-            }
+        binding.prioritySpinner.setOnItemClickListener { parent, _, position, _ ->
+            priority = parent?.selectedItem.toString()
+            val spinnerTextView = parent?.getChildAt(0) as TextView
+            changePriorityTextColor(spinnerTextView, position)
+        }
     }
 
     private fun changePriorityTextColor(spinnerTextView: TextView, position: Int) {
+        println("Spinner Text View -> $spinnerTextView")
         when (position) {
             0 -> spinnerTextView.setTextColor(Color.RED)
             1 -> spinnerTextView.setTextColor(Color.YELLOW)
@@ -85,7 +76,7 @@ class AddTodoFragment : BaseFragment<FragmentAddTodoBinding>(R.layout.fragment_a
             val todoEntity = TodoEntity(
                 0,
                 title,
-                parsePriority(priority),
+                Priority.parse(priority),
                 description
             )
             viewModel.insertTodo(todoEntity)
@@ -93,15 +84,6 @@ class AddTodoFragment : BaseFragment<FragmentAddTodoBinding>(R.layout.fragment_a
             findNavController().popBackStack()
         }
 
-    }
-
-    private fun parsePriority(priority: String): Priority {
-        return when (priority) {
-            "Low" -> Priority.LOW
-            "Medium" -> Priority.MEDIUM
-            "High" -> Priority.HIGH
-            else -> Priority.LOW
-        }
     }
 
     private fun validateTodoData(title: String, description: String): Boolean {

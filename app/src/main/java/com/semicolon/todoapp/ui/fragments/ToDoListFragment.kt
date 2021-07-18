@@ -7,7 +7,9 @@ import androidx.navigation.fragment.findNavController
 import com.semicolon.todoapp.R
 import com.semicolon.todoapp.databinding.FragmentToDoListBinding
 import com.semicolon.todoapp.ui.BaseFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ToDoListFragment : BaseFragment<FragmentToDoListBinding>(R.layout.fragment_to_do_list) {
     override fun onViewCreated() {
     }
