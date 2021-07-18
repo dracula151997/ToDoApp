@@ -27,7 +27,11 @@ class MainViewModel @Inject constructor(
         repository.updateTodo(todoEntity)
     }
 
-    fun deleteTodo(todoEntity: TodoEntity) = viewModelScope.launch(Dispatchers.IO){
+    fun deleteTodo(todoEntity: TodoEntity) = viewModelScope.launch(Dispatchers.IO) {
         repository.deleteTodo(todoEntity)
+    }
+
+    fun deleteAllTodos() = viewModelScope.launch(Dispatchers.IO) {
+        repository.deleteAllTodos()
     }
 }
