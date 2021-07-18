@@ -22,4 +22,6 @@ class MainRepository @Inject constructor(
     suspend fun updateTodo(todoEntity: TodoEntity){
         todoDao.updateTodo(todoEntity)
     }
+
+    suspend fun deleteTodo(todoEntity: TodoEntity) = todoDao.deleteTodo(todoEntity)
 }

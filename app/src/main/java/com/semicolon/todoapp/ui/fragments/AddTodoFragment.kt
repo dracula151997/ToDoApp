@@ -17,6 +17,7 @@ import com.semicolon.todoapp.data.TodoEntity
 import com.semicolon.todoapp.databinding.FragmentAddTodoBinding
 import com.semicolon.todoapp.repo.MainViewModel
 import com.semicolon.todoapp.ui.BaseFragment
+import com.semicolon.todoapp.utils.hideSoftKeyboard
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -25,6 +26,7 @@ class AddTodoFragment : BaseFragment<FragmentAddTodoBinding>(R.layout.fragment_a
     private var priority: String = ""
     private val args by navArgs<AddTodoFragmentArgs>()
     private var update: Boolean = false
+    private lateinit var currentTodo: TodoEntity
     override fun onViewCreated() {
         val priorityItems = listOf("Low", "Medium", "High")
         val adapter = ArrayAdapter(
@@ -36,6 +38,7 @@ class AddTodoFragment : BaseFragment<FragmentAddTodoBinding>(R.layout.fragment_a
 
         args.todo?.let { todo ->
             binding.todo = todo
+            currentTodo = todo
             binding.prioritySpinner.setText(
                 binding.prioritySpinner.adapter.getItem(
                     convertPriorityToPosition(todo.priority)
@@ -82,16 +85,23 @@ class AddTodoFragment : BaseFragment<FragmentAddTodoBinding>(R.layout.fragment_a
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.menu_todo_add, menu)
+        menu.findItem(R.id.menu_delete).isVisible = update
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        hideSoftKeyboard()
         if (item.itemId == R.id.menu_todo_add) {
-            if (!update)
-                insertTodo()
-            else
-                updateTodo()
+            insertOrUpdateTodo()
+        } else if (item.itemId == R.id.menu_delete) {
+            deleteTodo()
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun deleteTodo() {
+        viewModel.deleteTodo(currentTodo)
+        Toast.makeText(requireContext(), "Todo has been deleted", Toast.LENGTH_SHORT).show()
+        findNavController().popBackStack()
     }
 
     private fun updateTodo() {
@@ -102,25 +112,28 @@ class AddTodoFragment : BaseFragment<FragmentAddTodoBinding>(R.layout.fragment_a
             viewModel.updateTodo(todo)
             Toast.makeText(requireContext(), "Todo updated successfully!", Toast.LENGTH_SHORT)
                 .show()
-            findNavController().popBackStack()
-
-
         }
     }
 
-    private fun insertTodo() {
+    private fun insertOrUpdateTodo() {
         val title = binding.title.text.toString()
         val description = binding.descriptionEditText.text.toString()
         val validation = validateTodoData(title, description)
         if (validation) {
-            val todoEntity = TodoEntity(
-                0,
-                title,
-                Priority.parse(priority),
-                description
-            )
-            viewModel.insertTodo(todoEntity)
-            Toast.makeText(requireContext(), "Todo Added successfully!", Toast.LENGTH_SHORT).show()
+            if (!update) {
+                val todoEntity = TodoEntity(
+                    0,
+                    title,
+                    Priority.parse(priority),
+                    description
+                )
+                viewModel.insertTodo(todoEntity)
+                Toast.makeText(requireContext(), "Todo Added successfully!", Toast.LENGTH_SHORT)
+                    .show()
+            } else {
+                updateTodo()
+            }
+
             findNavController().popBackStack()
         }
 

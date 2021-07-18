@@ -1,10 +1,7 @@
 package com.semicolon.todoapp.data
 
-import androidx.room.Dao
-import androidx.room.Insert
+import androidx.room.*
 import androidx.room.OnConflictStrategy.IGNORE
-import androidx.room.Query
-import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 
 /**
@@ -19,5 +16,8 @@ interface TodoDao {
     fun getTodos(): Flow<List<TodoEntity>>
 
     @Update
-    fun updateTodo(todoEntity: TodoEntity)
+    suspend fun updateTodo(todoEntity: TodoEntity)
+
+    @Delete
+    suspend fun deleteTodo(todoEntity: TodoEntity)
 }

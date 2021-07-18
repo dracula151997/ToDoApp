@@ -10,4 +10,8 @@
         app:showAsAction="ifRoom"
         tools:targetApi="o" />
 
+    <item android:id="@+id/menu_delete"
+        app:showAsAction="never"
+        android:title="@string/delete"/>
+
 </menu>
