@@ -8,6 +8,10 @@
         <variable
             name="todoAdapter"
             type="com.semicolon.todoapp.adapters.TodoAdapter" />
+
+        <variable
+            name="emptyTodo"
+            type="Boolean" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -17,6 +21,7 @@
 
         <androidx.recyclerview.widget.RecyclerView
             setTodoAdapter="@{todoAdapter}"
+            viewGone="@{emptyTodo}"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layoutManager="androidx.recyclerview.widget.StaggeredGridLayoutManager"
@@ -29,6 +34,7 @@
 
         <LinearLayout
             android:id="@+id/empty_data_layout"
+            viewGone="@{!emptyTodo}"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -38,7 +44,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.39">
+            app:layout_constraintVertical_bias="0.39"
+            tools:visibility="visible">
 
             <ImageView
                 android:layout_width="100dp"

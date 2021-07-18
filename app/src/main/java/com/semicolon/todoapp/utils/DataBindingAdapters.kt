@@ -1,7 +1,8 @@
 package com.semicolon.todoapp.utils
 
-import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
+import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -30,29 +31,10 @@ class DataBindingAdapters {
             this.adapter = adapter
         }
 
-        @BindingAdapter("convertPriorityToPosition")
+        @BindingAdapter("viewGone")
         @JvmStatic
-        fun convertPriorityToPosition(spinner: AutoCompleteTextView, priority: Priority) {
-            println("Priority ${spinner.adapter}")
-            val priorityName = spinner.adapter?.getItem(getPriorityPosition(priority)) as? String
-            spinner.setText(priorityName, false)
-        }
-
-        @BindingAdapter("setSpinnerList")
-        @JvmStatic
-        fun setSpinnerList(spinner: AutoCompleteTextView, items: List<String>) {
-            val adapter =
-                ArrayAdapter(spinner.context, android.R.layout.simple_list_item_1, items)
-            spinner.setAdapter(adapter)
-        }
-
-
-        private fun getPriorityPosition(priority: Priority): Int {
-            return when (priority) {
-                Priority.LOW -> 0
-                Priority.MEDIUM -> 1
-                Priority.HIGH -> 2
-            }
+        fun View.viewGone(gone: Boolean) {
+            this.visibility = if (gone) GONE else VISIBLE
         }
     }
 }

@@ -28,6 +28,7 @@ class ToDoListFragment : BaseFragment<FragmentToDoListBinding>(R.layout.fragment
     override fun subscribeLiveDataObservers() {
         lifecycleScope.launchWhenCreated {
             viewModel.readTodos.collect { todos ->
+                binding.emptyTodo = todos.isEmpty()
                 adapter.setTodos(todos)
             }
         }
