@@ -15,5 +15,5 @@ interface TodoDao {
     suspend fun insertTodo(item: TodoEntity)
 
     @Query("SELECT * FROM todos ORDER BY id ASC")
-    fun getTodos(): Flow<TodoEntity>
+    fun getTodos(): Flow<List<TodoEntity>>
 }
