@@ -13,6 +13,9 @@ class MainRepository @Inject constructor(
     private val todoDao: TodoDao
 ) {
     val getTodos = todoDao.getTodos()
+    val sortByHighPriority = todoDao.sortByHighPriority()
+    val sortByLowPriority = todoDao.sortByLowPriority()
+    val sortByMediumPriority = todoDao.sortByMediumPriority()
 
     suspend fun insertTodo(todoEntity: TodoEntity) {
         todoDao.insertTodo(todoEntity)

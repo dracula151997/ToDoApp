@@ -18,6 +18,9 @@ class MainViewModel @Inject constructor(
     application: Application
 ) : AndroidViewModel(application) {
     val readTodos = repository.getTodos
+    val sortByHighPriority = repository.sortByHighPriority
+    val sortByMediumPriority = repository.sortByMediumPriority
+    val sortByLowPriority = repository.sortByLowPriority
 
     fun insertTodo(todoEntity: TodoEntity) = viewModelScope.launch(Dispatchers.IO) {
         repository.insertTodo(todoEntity)

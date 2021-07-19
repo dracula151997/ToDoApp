@@ -66,8 +66,25 @@ class ToDoListFragment : BaseFragment<FragmentToDoListBinding>(R.layout.fragment
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.menu_delete_all) {
-            deleteAllTodos()
+        when (item.itemId) {
+            R.id.menu_delete_all -> {
+                deleteAllTodos()
+            }
+            R.id.menu_priority_high -> {
+                viewModel.sortByHighPriority.observe(this, { todos ->
+                    adapter.submitList(todos)
+                })
+            }
+            R.id.menu_priority_medium -> {
+                viewModel.sortByMediumPriority.observe(this, { todos ->
+                    adapter.submitList(todos)
+                })
+            }
+            R.id.menu_priority_low -> {
+                viewModel.sortByLowPriority.observe(this, { todos ->
+                    adapter.submitList(todos)
+                })
+            }
         }
         return super.onOptionsItemSelected(item)
     }
@@ -81,8 +98,7 @@ class ToDoListFragment : BaseFragment<FragmentToDoListBinding>(R.layout.fragment
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val todo = adapter.getTodo(viewHolder.adapterPosition)
                 viewModel.deleteTodo(todo)
-                adapter.notifyItemRemoved(viewHolder.adapterPosition)
-                restoreDeletedTodo(viewHolder.itemView, todo, viewHolder.adapterPosition)
+                restoreDeletedTodo(viewHolder.itemView, todo)
             }
 
         }
@@ -91,7 +107,7 @@ class ToDoListFragment : BaseFragment<FragmentToDoListBinding>(R.layout.fragment
         itemTouchHelper.attachToRecyclerView(binding.todosRecycler)
     }
 
-    private fun restoreDeletedTodo(view: View, deletedTodo: TodoEntity, position: Int) {
+    private fun restoreDeletedTodo(view: View, deletedTodo: TodoEntity) {
         val snackbar = Snackbar.make(
             view,
             "Deleted '${deletedTodo.title}'",
@@ -99,7 +115,6 @@ class ToDoListFragment : BaseFragment<FragmentToDoListBinding>(R.layout.fragment
         )
         snackbar.setAction("Undo") {
             viewModel.insertTodo(deletedTodo)
-            adapter.notifyItemChanged(position)
         }
         snackbar.show()
     }

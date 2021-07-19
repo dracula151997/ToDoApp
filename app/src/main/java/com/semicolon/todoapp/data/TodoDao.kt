@@ -27,4 +27,14 @@ interface TodoDao {
 
     @Query("SELECT * FROM todos WHERE title LIKE :query")
     fun search(query: String): LiveData<List<TodoEntity>>
+
+    @Query("SELECT * FROM todos ORDER BY CASE WHEN priority LIKE 'H%' THEN 1 WHEN priority LIKE 'M%' THEN 2 WHEN priority LIKE 'L%' THEN 3 END")
+    fun sortByHighPriority(): LiveData<List<TodoEntity>>
+
+    @Query("SELECT * FROM todos ORDER BY CASE WHEN priority LIKE 'L%' THEN 1 WHEN priority LIKE 'M%' THEN 2 WHEN priority LIKE 'H%' THEN 3 END")
+    fun sortByLowPriority(): LiveData<List<TodoEntity>>
+
+    @Query("SELECT * FROM todos ORDER BY CASE WHEN priority LIKE 'M%' THEN 1 WHEN priority LIKE 'H%' THEN 2 WHEN priority LIKE 'L%' THEN 3 END")
+    fun sortByMediumPriority(): LiveData<List<TodoEntity>>
+
 }
