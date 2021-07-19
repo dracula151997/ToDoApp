@@ -17,6 +17,7 @@ import com.semicolon.todoapp.data.TodoEntity
 import com.semicolon.todoapp.databinding.FragmentAddTodoBinding
 import com.semicolon.todoapp.repo.MainViewModel
 import com.semicolon.todoapp.ui.BaseFragment
+import com.semicolon.todoapp.ui.MainActivity
 import com.semicolon.todoapp.utils.hideSoftKeyboard
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -44,6 +45,7 @@ class AddTodoFragment : BaseFragment<FragmentAddTodoBinding>(R.layout.fragment_a
                     convertPriorityToPosition(todo.priority)
                 ) as String, false
             )
+            (requireActivity() as MainActivity).supportActionBar?.title = "Update Todo"
             update = true
 
         }

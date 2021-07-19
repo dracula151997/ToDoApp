@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/toDoListFragment"
         android:name="com.semicolon.todoapp.ui.fragments.ToDoListFragment"
-        android:label="fragment_to_do_list"
+        android:label="Todo"
         tools:layout="@layout/fragment_to_do_list">
         <action
             android:id="@+id/action_toDoListFragment_to_addTodoFragment"
@@ -17,32 +17,16 @@
             app:exitAnim="@anim/anim_to_left"
             app:popEnterAnim="@anim/anim_from_left"
             app:popExitAnim="@anim/anim_to_right" />
-        <action
-            android:id="@+id/action_toDoListFragment_to_updateTodoFragment"
-            app:destination="@id/updateTodoFragment"
-            app:enterAnim="@anim/anim_from_right"
-            app:exitAnim="@anim/anim_to_left"
-            app:popEnterAnim="@anim/anim_from_left"
-            app:popExitAnim="@anim/anim_to_right" />
     </fragment>
     <fragment
         android:id="@+id/addTodoFragment"
         android:name="com.semicolon.todoapp.ui.fragments.AddTodoFragment"
-        android:label="fragment_add_todo"
-        tools:layout="@layout/fragment_add_todo" >
+        android:label=" Add Todo"
+        tools:layout="@layout/fragment_add_todo">
         <argument
             android:name="todo"
+            android:defaultValue="@null"
             app:argType="com.semicolon.todoapp.data.TodoEntity"
-            app:nullable="true"
-            android:defaultValue="@null" />
-    </fragment>
-    <fragment
-        android:id="@+id/updateTodoFragment"
-        android:name="com.semicolon.todoapp.ui.fragments.UpdateTodoFragment"
-        android:label="fragment_update_todo"
-        tools:layout="@layout/fragment_update_todo" >
-        <argument
-            android:name="todo"
-            app:argType="com.semicolon.todoapp.data.TodoEntity" />
+            app:nullable="true" />
     </fragment>
 </navigation>
