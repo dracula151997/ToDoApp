@@ -1,5 +1,6 @@
 package com.semicolon.todoapp.data
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 import androidx.room.OnConflictStrategy.IGNORE
 import kotlinx.coroutines.flow.Flow
@@ -23,4 +24,7 @@ interface TodoDao {
 
     @Query("DELETE FROM todos")
     suspend fun deleteAllTodos()
+
+    @Query("SELECT * FROM todos WHERE title LIKE :query")
+    fun search(query: String): LiveData<List<TodoEntity>>
 }

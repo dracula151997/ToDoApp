@@ -34,4 +34,6 @@ class MainViewModel @Inject constructor(
     fun deleteAllTodos() = viewModelScope.launch(Dispatchers.IO) {
         repository.deleteAllTodos()
     }
+
+    fun search(query: String) = repository.search(query)
 }

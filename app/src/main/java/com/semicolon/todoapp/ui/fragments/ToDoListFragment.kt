@@ -4,6 +4,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -25,7 +26,8 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class ToDoListFragment : BaseFragment<FragmentToDoListBinding>(R.layout.fragment_to_do_list) {
+class ToDoListFragment : BaseFragment<FragmentToDoListBinding>(R.layout.fragment_to_do_list),
+    SearchView.OnQueryTextListener {
     private val viewModel by viewModels<MainViewModel>()
     private val adapter by lazy { TodoAdapter() }
     override fun onViewCreated() {
@@ -57,6 +59,10 @@ class ToDoListFragment : BaseFragment<FragmentToDoListBinding>(R.layout.fragment
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.menu_todo_list, menu)
+        val menuSearch = menu.findItem(R.id.menu_search)
+        val searchView = menuSearch.actionView as? SearchView
+        searchView?.isSubmitButtonEnabled = true
+        searchView?.setOnQueryTextListener(this)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -96,6 +102,27 @@ class ToDoListFragment : BaseFragment<FragmentToDoListBinding>(R.layout.fragment
             adapter.notifyItemChanged(position)
         }
         snackbar.show()
+    }
+
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        if (query.isNullOrEmpty()) return false
+        searchForTodo(query)
+        return true
+    }
+
+    private fun searchForTodo(query: String) {
+        var searchQuery = query
+        searchQuery = "%$searchQuery%"
+        viewModel.search(searchQuery).observe(this, { todos ->
+            binding.emptyTodo = todos.isEmpty()
+            adapter.submitList(todos)
+        })
+    }
+
+    override fun onQueryTextChange(newText: String?): Boolean {
+        if (newText.isNullOrEmpty()) return false
+        searchForTodo(newText)
+        return true
     }
 
 

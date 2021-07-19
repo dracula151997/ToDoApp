@@ -4,7 +4,6 @@ import com.semicolon.todoapp.data.TodoDao
 import com.semicolon.todoapp.data.TodoEntity
 import dagger.hilt.android.scopes.ActivityRetainedScoped
 import javax.inject.Inject
-import javax.inject.Singleton
 
 /**
  *Created by Hassan Mohammed on 6/26/21
@@ -15,15 +14,17 @@ class MainRepository @Inject constructor(
 ) {
     val getTodos = todoDao.getTodos()
 
-    suspend fun insertTodo(todoEntity: TodoEntity){
+    suspend fun insertTodo(todoEntity: TodoEntity) {
         todoDao.insertTodo(todoEntity)
     }
 
-    suspend fun updateTodo(todoEntity: TodoEntity){
+    suspend fun updateTodo(todoEntity: TodoEntity) {
         todoDao.updateTodo(todoEntity)
     }
 
     suspend fun deleteTodo(todoEntity: TodoEntity) = todoDao.deleteTodo(todoEntity)
 
     suspend fun deleteAllTodos() = todoDao.deleteAllTodos()
+
+    fun search(query: String) = todoDao.search(query)
 }
