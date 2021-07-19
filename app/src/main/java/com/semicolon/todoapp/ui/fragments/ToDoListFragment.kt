@@ -20,6 +20,7 @@ import com.semicolon.todoapp.repo.MainViewModel
 import com.semicolon.todoapp.ui.BaseFragment
 import com.semicolon.todoapp.utils.SwipeToDelete
 import dagger.hilt.android.AndroidEntryPoint
+import jp.wasabeef.recyclerview.animators.SlideInUpAnimator
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -30,6 +31,9 @@ class ToDoListFragment : BaseFragment<FragmentToDoListBinding>(R.layout.fragment
     override fun onViewCreated() {
         binding.todoAdapter = adapter
         registerSwipeToDelete()
+        binding.todosRecycler.itemAnimator = SlideInUpAnimator().apply {
+            addDuration = 200
+        }
     }
 
     override fun setListenersForViews() {
@@ -41,7 +45,7 @@ class ToDoListFragment : BaseFragment<FragmentToDoListBinding>(R.layout.fragment
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.readTodos.collect { todos ->
                     binding.emptyTodo = todos.isEmpty()
-                    adapter.setTodos(todos)
+                    adapter.submitList(todos)
                 }
             }
 
