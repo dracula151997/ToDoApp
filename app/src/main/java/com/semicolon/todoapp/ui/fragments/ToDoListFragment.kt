@@ -3,20 +3,25 @@ package com.semicolon.todoapp.ui.fragments
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import android.widget.Toast
+import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import com.semicolon.todoapp.R
 import com.semicolon.todoapp.adapters.TodoAdapter
+import com.semicolon.todoapp.data.TodoEntity
 import com.semicolon.todoapp.databinding.FragmentToDoListBinding
 import com.semicolon.todoapp.repo.MainViewModel
 import com.semicolon.todoapp.ui.BaseFragment
 import com.semicolon.todoapp.utils.SwipeToDelete
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class ToDoListFragment : BaseFragment<FragmentToDoListBinding>(R.layout.fragment_to_do_list) {
@@ -32,11 +37,14 @@ class ToDoListFragment : BaseFragment<FragmentToDoListBinding>(R.layout.fragment
     }
 
     override fun subscribeLiveDataObservers() {
-        lifecycleScope.launchWhenCreated {
-            viewModel.readTodos.collect { todos ->
-                binding.emptyTodo = todos.isEmpty()
-                adapter.setTodos(todos)
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.readTodos.collect { todos ->
+                    binding.emptyTodo = todos.isEmpty()
+                    adapter.setTodos(todos)
+                }
             }
+
         }
     }
 
@@ -63,17 +71,27 @@ class ToDoListFragment : BaseFragment<FragmentToDoListBinding>(R.layout.fragment
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val todo = adapter.getTodo(viewHolder.adapterPosition)
                 viewModel.deleteTodo(todo)
-                Toast.makeText(
-                    requireContext(),
-                    "Successfully removed: '${todo.title}'",
-                    Toast.LENGTH_SHORT
-                ).show()
+                adapter.notifyItemRemoved(viewHolder.adapterPosition)
+                restoreDeletedTodo(viewHolder.itemView, todo, viewHolder.adapterPosition)
             }
 
         }
 
         val itemTouchHelper = ItemTouchHelper(swipeToDeleteListener)
         itemTouchHelper.attachToRecyclerView(binding.todosRecycler)
+    }
+
+    private fun restoreDeletedTodo(view: View, deletedTodo: TodoEntity, position: Int) {
+        val snackbar = Snackbar.make(
+            view,
+            "Deleted '${deletedTodo.title}'",
+            Snackbar.LENGTH_LONG
+        )
+        snackbar.setAction("Undo") {
+            viewModel.insertTodo(deletedTodo)
+            adapter.notifyItemChanged(position)
+        }
+        snackbar.show()
     }
 
 
